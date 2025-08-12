@@ -1,5 +1,4 @@
 package layouts
-
 import "domi.ninja/example-project/webapp"
 
 // viewContent: the view to render
@@ -8,29 +7,27 @@ import "domi.ninja/example-project/webapp"
 // seoData: global or page specific
 // version: the version of the app, used for cache busting
 templ Master(mainContent templ.Component, headerContent templ.Component, siteData webapp.SiteConfig, seoData webapp.SiteConfig, version string) {
+    
+
 	<!DOCTYPE html>
-	<html lang="en" class="bg-surface-alt">
+	<html lang="en" class="bg-background">
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-			<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+
 			<meta name="referrer" content="always"/>
+
+			<meta name="title" content={ siteData.Title }/>
 			<meta name="description" content={ siteData.Description }/>
 			<meta name="keywords" content={ siteData.Keywords }/>
-			<meta name="author" content={ siteData.Author }/>
+
 			<title>{ siteData.Title }</title>
 			<link rel="stylesheet" href={ siteData.AppPath + "/assets/style.css?v=" + version }/>
 			<link rel="icon" type="image/png" href={ siteData.DefaultImage }/>
-			<meta property="og:image" content={ siteData.AppPath + siteData.DefaultImage }/>
-			<meta property="twitter:card" content="summary_large_image"/>
-			// <meta property="og:url" content={ siteData.AppPath }/>
+			<meta property="og:image" content={ siteData.AppPath + siteData.DefaultImage + "?v=" + version }/>
 			<meta property="og:type" content="website"/>
 			<meta property="og:title" content={ seoData.Title }/>
 			<meta property="og:description" content={ seoData.Description }/>
-			<meta property="og:image" content={ siteData.AppPath + seoData.DefaultImage }/>
-			<meta name="twitter:title" content={ seoData.Title }/>
-			<meta name="twitter:description" content={ seoData.Description }/>
-			<meta name="twitter:image" content={ siteData.AppPath + seoData.DefaultImage }/>
 		</head>
 		<body class="">
 			if headerContent != nil {
@@ -49,7 +46,11 @@ templ Master(mainContent templ.Component, headerContent templ.Component, siteDat
 			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 			<!-- main js -->
 			<script src={ siteData.AppPath + "/assets/js/main.js?v=" + version }></script>
-			<!-- <script src={ appPath + "/assets/js/dev-reload.js?v=" + version }></script> -->
+			
+            if webapp.DevMode() {
+				<script src={ siteData.AppPath + "/assets/js/reload.js?v=" + version }></script>
+			}
+
 		</body>
 	</html>
 }

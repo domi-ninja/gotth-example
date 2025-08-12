@@ -14,12 +14,12 @@ func (webapp *WebApp) HandlePost_PostId_GET(w http.ResponseWriter, r *http.Reque
 
 	post, err := webapp.db.GetPostById(r.Context(), postId)
 	if err != nil {
-		respondWithError(w, http.StatusNotFound)
+		RespondWithError(w, http.StatusNotFound)
 		log.Print("error getting post: ", err)
 		return
 	}
 
 	postView := views.Post(post)
-	master := layouts.Master(postView, nil, webapp.siteCfg.Site, webapp.siteCfg.Site, webapp.buildRandomNumber)
+	master := layouts.Master(postView, nil, webapp.cfg.Site, webapp.cfg.Site, webapp.version)
 	master.Render(r.Context(), w)
 }

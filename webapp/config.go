@@ -9,22 +9,11 @@ import (
 	toml "github.com/pelletier/go-toml/v2"
 )
 
-type SiteConfig struct {
-	AppPath      string `toml:"app_path"`
-	Title        string `toml:"title"`
-	Description  string `toml:"description"`
-	DefaultImage string `toml:"default_image"`
-	Keywords     string `toml:"keywords"`
-	Author       string `toml:"author"`
-	ContactEmail string `toml:"contact_email"`
-}
-
+// this is a nice way to parse nested configs from a toml file IMO
 type AppConfig struct {
 	Server struct {
 		Port        int    `toml:"port"`
 		BindAddress string `toml:"bind_address"`
-		AppRoot     string `toml:"approot"`
-		Upload      string `toml:"upload"`
 	} `toml:"server"`
 
 	Site SiteConfig `toml:"site"`
@@ -36,6 +25,16 @@ type AppConfig struct {
 	Secrets struct {
 		JWT_SECRET string
 	}
+}
+
+// this struct is out here (instead of nested in AppConfig) because we reference it separate from AppConfig
+type SiteConfig struct {
+	AppPath string `toml:"app_path"`
+
+	Title        string `toml:"title"`
+	Description  string `toml:"description"`
+	DefaultImage string `toml:"default_image"`
+	Keywords     string `toml:"keywords"`
 }
 
 func MustLoadConfig(path string) *AppConfig {
@@ -70,9 +69,6 @@ func MustLoadConfig(path string) *AppConfig {
 	}
 	if config.Site.Keywords == "" {
 		log.Fatal("site.keywords is required")
-	}
-	if config.Site.Author == "" {
-		log.Fatal("site.author is required")
 	}
 
 	return config

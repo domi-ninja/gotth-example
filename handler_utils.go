@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-func respondWithText(contentType string, w http.ResponseWriter, code int, text string) {
+func RespondWithText(contentType string, w http.ResponseWriter, code int, text string) {
 	w.Header().Set("Content-Type", contentType)
 	w.WriteHeader(code)
 	w.Write([]byte(text))
 }
 
-func respondWithJson(w http.ResponseWriter, code int, payload interface{}) {
+func RespondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
@@ -20,7 +20,7 @@ func respondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 }
 
 // renders generic error message for a given http status code, does not leak internal error details
-func respondWithError(w http.ResponseWriter, code int) {
+func RespondWithError(w http.ResponseWriter, code int) {
 	errMsg := "error"
 	if code < 400 {
 		log.Fatalf("Argument error, think about what you are doing here.")

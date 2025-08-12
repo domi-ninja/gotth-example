@@ -46,11 +46,12 @@ db:
 
 # linux: tailwindcss (the compiled version)'s watch command depends on a binary called "watchman", so install it if you get the warning  
 # Then run this in the background, separate from the server, because it does not seem to work with air and '&' backgrounding
+# Also I am using the v3 version of tailwindcss because v4 seems cursed
 .PHONY: tailwind-watch
 tailwind-watch:
-	npx tailwindcss@3.x.x -c ./frontend/tailwind.config.js -i ./frontend/tailwind-input-v3.css -o ./frontend/assets/style.css --watch
+	npx tailwindcss@3.x.x -c ./frontend/tailwind.config-v3.js -i ./frontend/tailwind-input-v3.css -o ./frontend/assets/style.css --watch
 
 .PHONY: tailwind-build
 tailwind-build:
-	npx tailwindcss@3.x.x -c ./frontend/tailwind.config.js -i ./frontend/tailwind-input-v3.css -o ./frontend/assets/style.css --minify
+	npx tailwindcss@3.x.x -c ./frontend/tailwind.config-v3.js -i ./frontend/tailwind-input-v3.css -o ./frontend/assets/style.css --minify
 

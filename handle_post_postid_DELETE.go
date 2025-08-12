@@ -9,13 +9,13 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (webapp *WebApp) HandlePost_DELETE(w http.ResponseWriter, r *http.Request) {
+func (webapp *WebApp) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request) {
 
 	postId := chi.URLParam(r, "postId")
 
 	post, err := webapp.db.GetPostById(r.Context(), postId)
 	if err != nil {
-		respondWithError(w, http.StatusNotFound)
+		RespondWithError(w, http.StatusNotFound)
 		log.Print("error getting post for delete: ", err, " postId: ", postId)
 		return
 	}
@@ -29,7 +29,7 @@ func (webapp *WebApp) HandlePost_DELETE(w http.ResponseWriter, r *http.Request) 
 	})
 
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError)
+		RespondWithError(w, http.StatusInternalServerError)
 		log.Print("error getting posts: ", err)
 		return
 	}
@@ -37,7 +37,7 @@ func (webapp *WebApp) HandlePost_DELETE(w http.ResponseWriter, r *http.Request) 
 	postsView := views.Posts(posts)
 	err = postsView.Render(r.Context(), w)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError)
+		RespondWithError(w, http.StatusInternalServerError)
 		return
 	}
 }

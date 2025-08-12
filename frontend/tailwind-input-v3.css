@@ -67,6 +67,10 @@
 
 @layer components {
 
+  * {
+    @apply text-foreground;
+  }
+
   /* Focus styles for interactive elements */
   button,
   input,
@@ -75,6 +79,10 @@
   a,
   [tabindex]:not([tabindex="-1"]) {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  input, textarea {
+    @apply bg-background text-foreground;  
   }
 
   /* Base button styles */

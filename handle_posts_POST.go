@@ -31,7 +31,7 @@ func (webapp *WebApp) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError)
+		RespondWithError(w, http.StatusInternalServerError)
 		log.Print("error getting posts: ", err)
 		return
 	}
@@ -39,7 +39,7 @@ func (webapp *WebApp) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 	postsView := views.Posts(posts)
 	err = postsView.Render(r.Context(), w)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError)
+		RespondWithError(w, http.StatusInternalServerError)
 		return
 	}
 }

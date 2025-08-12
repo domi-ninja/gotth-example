@@ -19,14 +19,16 @@ import (
 )
 
 type WebApp struct {
-	db                *db_generated.Queries
-	memcache          *cache.Cache
-	siteCfg           *webapp.AppConfig
-	buildRandomNumber string
-	appPath           string
+	cfg *webapp.AppConfig
+
+	db *db_generated.Queries
+
+	version  string
+	memcache *cache.Cache
 }
 
 func Run() {
+	// pretty verbose logger but it helps to find where panics happend as well as logging all request
 	webapp.UseLogger()
 
 	// toml config file for set settings, url etc.
@@ -43,9 +45,11 @@ func Run() {
 
 	// give our http route handlers the stuff they need
 	app := &WebApp{
-		db:                db_generated.New(dbConn),
-		siteCfg:           cfg,
-		buildRandomNumber: webapp.BuildRandomNumber,
+		db:  db_generated.New(dbConn),
+		cfg: cfg,
+
+		version:  webapp.BuildRandomNumber,
+		memcache: cache.New(5*time.Minute, 10*time.Minute),
 	}
 
 	router := chi.NewRouter()
@@ -77,19 +81,24 @@ func Run() {
 
 	// parameterised routes need to be registered before the root route
 	router.Get("/post/{postId}", app.HandlePost_PostId_GET)
-	router.Delete("/post/{postId}", app.HandlePost_DELETE)
+	router.Delete("/post/{postId}", app.HandlePost_PostId_DELETE)
+
+	// crud routes
+	router.Post("/posts", app.HandlePosts_POST)
+
+	if webapp.DevMode() {
+		router.Get("/reload", app.HandleReload_WS)
+	}
 
 	// root routes
 	router.Get("/", app.HandleIndex)
 
-	//
-	router.Post("/posts", app.HandlePosts_POST)
-
 	// maybe some admin routes on /admin?
+	// Bundle your routes in a separate file and chi route bundle thing
 	// router.Route("/admin", webapp.adminRoutes)
 
 	// Listen
-	bindAddr := app.siteCfg.Server.BindAddress + ":" + fmt.Sprint(app.siteCfg.Server.Port)
+	bindAddr := app.cfg.Server.BindAddress + ":" + fmt.Sprint(app.cfg.Server.Port)
 	server := &http.Server{
 		Handler: router,
 		Addr:    bindAddr,

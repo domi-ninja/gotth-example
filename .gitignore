@@ -6,3 +6,4 @@ node_modules
 data.db
 frontend/assets/style.css
 *_templ.go
+bin/app

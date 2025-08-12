@@ -1,22 +1,19 @@
-# server Configuration
 [server]
 port = 5000
 bind_address = "127.0.0.1"  # empty string means all interfaces
 root=""
-upload = "./uploads/"
 
-# Site Configuration
 [site]
-app_path = "" # in case we want to run the app on a sub-url
+# use this to configure all links on the page for running on an url,
+app_path = "" 
 
-# SEO opengraph stuff
-title = "SEO Title"
-description = "Seo text about my page!"
+# data for site header and also SEO/opengraph
+title = "Gotths comments"
+description = "This is my cool forum page!"
 default_image = "/img/assets/logo.jpg"
 keywords = "Forum, Anonymous, Sample App"
-author = "Anonymous"
+# author = ""
 
-# Cache Configuration
 [cache]
 default_expiration = "5m"
 cleanup_interval = "10m"
