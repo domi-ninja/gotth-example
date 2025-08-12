@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.65rem;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.141 0.005 285.823);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.141 0.005 285.823);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.141 0.005 285.823);
+    --primary: oklch(0.8 0.5 120);
+    --primary-foreground: oklch(0.4 0.8 120);
+    --secondary: oklch(1 0.001 286.375);
+    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --muted: oklch(0.967 0.001 286.375);
+    --muted-foreground: oklch(0.552 0.016 285.938);
+    --accent: oklch(0.99 0.1 120);
+    --accent-foreground: oklch(0.21 0.006 285.885);
+    --destructive: oklch(0.9 0.3 27);
+    --border: oklch(0.92 0.004 286.32);
+    --input: oklch(0.92 0.004 286.32);
+    --ring: oklch(0.645 0.246 16.439);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+  }
+
+  .dark {
+    --background: oklch(0.141 0.005 285.823);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.21 0.006 285.885);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.21 0.006 285.885);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.645 0.246 16.439);
+    --primary-foreground: oklch(0.969 0.015 12.422);
+    --secondary: oklch(0.274 0.006 286.033);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.274 0.006 286.033);
+    --muted-foreground: oklch(0.705 0.015 286.067);
+    --accent: oklch(0.274 0.006 286.033);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.645 0.246 16.439);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.21 0.006 285.885);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.645 0.246 16.439);
+    --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+    --sidebar-accent: oklch(0.274 0.006 286.033);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.645 0.246 16.439);
+  }
+}
+
+@layer components {
+
+  /* Focus styles for interactive elements */
+  button,
+  input,
+  select,
+  textarea,
+  a,
+  [tabindex]:not([tabindex="-1"]) {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  /* Base button styles */
+  .btn {
+    @apply px-4 py-2 rounded font-semibold border transition-colors shadow-sm;
+    @apply hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground border-border;
+    @apply hover:bg-primary/60;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-secondary-foreground border-border;
+    @apply hover:bg-secondary/60;
+  }
+
+  .btn-outline {
+    @apply btn bg-background text-foreground border-border;
+    @apply hover:bg-muted;
+  }
+
+  .btn-destructive {
+    @apply btn bg-destructive text-destructive-foreground border-border;
+    @apply hover:bg-destructive/60;
+  }
+
+  /* Markdown content styles */
+  .md-container {
+    @apply text-foreground;
+
+    p {
+      @apply pb-2;
+    }
+
+    h1 {
+      @apply text-lg font-semibold pt-2;
+    }
+
+    h2 {
+      @apply text-lg pt-2;
+    }
+
+    h3 {
+      @apply text-base font-medium pt-2;
+    }
+
+    ul {
+      @apply list-disc list-inside pb-2;
+    }
+
+    ol {
+      @apply list-decimal list-inside pb-2;
+    }
+
+    li {
+      @apply pb-1;
+    }
+
+    a {
+      @apply text-primary hover:text-primary/80 underline;
+    }
+
+    code {
+      @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+    }
+
+    pre {
+      @apply bg-muted p-4 rounded overflow-x-auto;
+    }
+
+    blockquote {
+      @apply border-l-4 border-border pl-4 italic text-muted-foreground;
+    }
+  }
+}

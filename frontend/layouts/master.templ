@@ -1,0 +1,55 @@
+package layouts
+
+import "domi.ninja/example-project/webapp"
+
+// viewContent: the view to render
+// headerContent: optional, the header to render
+// siteData: global config
+// seoData: global or page specific
+// version: the version of the app, used for cache busting
+templ Master(mainContent templ.Component, headerContent templ.Component, siteData webapp.SiteConfig, seoData webapp.SiteConfig, version string) {
+	<!DOCTYPE html>
+	<html lang="en" class="bg-surface-alt">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+			<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+			<meta name="referrer" content="always"/>
+			<meta name="description" content={ siteData.Description }/>
+			<meta name="keywords" content={ siteData.Keywords }/>
+			<meta name="author" content={ siteData.Author }/>
+			<title>{ siteData.Title }</title>
+			<link rel="stylesheet" href={ siteData.AppPath + "/assets/style.css?v=" + version }/>
+			<link rel="icon" type="image/png" href={ siteData.DefaultImage }/>
+			<meta property="og:image" content={ siteData.AppPath + siteData.DefaultImage }/>
+			<meta property="twitter:card" content="summary_large_image"/>
+			// <meta property="og:url" content={ siteData.AppPath }/>
+			<meta property="og:type" content="website"/>
+			<meta property="og:title" content={ seoData.Title }/>
+			<meta property="og:description" content={ seoData.Description }/>
+			<meta property="og:image" content={ siteData.AppPath + seoData.DefaultImage }/>
+			<meta name="twitter:title" content={ seoData.Title }/>
+			<meta name="twitter:description" content={ seoData.Description }/>
+			<meta name="twitter:image" content={ siteData.AppPath + seoData.DefaultImage }/>
+		</head>
+		<body class="">
+			if headerContent != nil {
+				@headerContent
+			} else {
+				// this is ok, we can render the page without a header
+			}
+			<main id="view">
+				if mainContent != nil {
+					@mainContent
+				} else {
+					<div>mainContent not supplied</div>
+				}
+			</main>
+			<!-- htmx -->
+			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+			<!-- main js -->
+			<script src={ siteData.AppPath + "/assets/js/main.js?v=" + version }></script>
+			<!-- <script src={ appPath + "/assets/js/dev-reload.js?v=" + version }></script> -->
+		</body>
+	</html>
+}

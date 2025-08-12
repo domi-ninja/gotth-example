@@ -1,0 +1,27 @@
+package views
+ 
+import (
+	"domi.ninja/example-project/internal/db_generated"
+	"fmt"
+)
+
+templ Post(post db_generated.Post) {
+	<article class="bg-surface p-8 border border-outline hover:border-primary transition-colors duration-200">
+			<div class="flex justify-between">
+				<a href={ "/post/" + fmt.Sprintf("%v", post.ID) } class="flex flex-row gap-2">
+					{ post.CreatedAt.Format("2006-01-02 15:04:05") }
+					<h2 class="text-xl font-bold text-on-surface-strong mb-4">{ post.Title }</h2>
+				</a>
+
+				<!-- delete button for testing -->
+				<div hx-delete={ "/post/" + fmt.Sprintf("%v", post.ID) } hx-target="#view">
+					<button class="btn-destructive">Delete Post</button>
+				</div>
+			</div>
+
+		<div class="prose text-on-surface">
+			<p>{ post.Body }</p>
+		</div>
+	</article>
+		
+}

@@ -1,0 +1,34 @@
+package components
+
+import "strconv"
+
+type PagingData struct {
+	Page  int
+	Pages int
+	Prev  int
+	Next  int
+}
+
+type PagingProps struct {
+	Paging *PagingData
+}
+
+templ Paging(props PagingProps) {
+	if props.Paging != nil {
+		if props.Paging.Pages > 1 {
+			<nav class="p-8 text-on-surface bg-surface m-8 mr-0 flex gap-4 justify-center border border-outline">
+				if props.Paging.Prev > 0 {
+					<a class="button" href={ "?page=" + strconv.Itoa(props.Paging.Prev) } aria-label="Previous page">Previous</a>
+				} else {
+					<span class="button disabled" aria-label="Previous page (disabled)">Previous</span>
+				}
+				<span class="p-3 text-on-surface-strong font-bold bg-background border border-outline">{ strconv.Itoa(props.Paging.Page) } of { strconv.Itoa(props.Paging.Pages) }</span>
+				if props.Paging.Next <= props.Paging.Pages {
+					<a class="button" href={ "?page=" + strconv.Itoa(props.Paging.Next) } aria-label="Next page">Next</a>
+				} else {
+					<span class="button disabled" aria-label="Next page (disabled)">Next</span>
+				}
+			</nav>
+		}
+	}
+}

@@ -1,0 +1,25 @@
+package layouts
+
+import "domi.ninja/example-project/webapp"
+
+templ Header(siteData webapp.SiteConfig, toggleDarkComponent templ.Component) {
+	<header class="bg-surface-alt flex flex-row justify-between items-center gap-4 px-8 py-4 border-b border-outline shadow-sm">
+		<div class="flex items-baseline gap-6">
+			<h1 class="text-2xl font-bold text-on-surface-strong">
+				<a href="/" class="hover:text-primary transition-colors duration-200">
+					{ siteData.Title }
+				</a>
+			</h1>
+			<h2 class="text-on-surface font-medium hidden md:block">
+				{ siteData.Description }
+			</h2>
+		</div>
+		<div class="flex items-center">
+			if toggleDarkComponent != nil {
+				@toggleDarkComponent
+			} else {
+				<div class="text-on-surface opacity-50">Theme toggle unavailable</div>
+			}
+		</div>
+	</header>
+}

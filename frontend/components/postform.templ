@@ -1,0 +1,17 @@
+package components
+
+templ PostForm() {
+	<form hx-post="/posts" hx-target="#view" class="bg-surface p-8 m-8 border border-outline">
+		<div class="flex flex-col gap-4">
+			<div class="flex flex-col gap-2">
+				<label for="title" class="text-on-surface-strong font-bold">Title</label>
+				<input type="text" name="title" id="title" class="p-3 border border-outline bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter post title"/>
+			</div>
+			<div class="flex flex-col gap-2">
+				<label for="body" class="text-on-surface-strong font-bold">Content</label>
+				<textarea name="body" id="body" rows="4" class="p-3 border border-outline bg-surface text-on-surface resize-y focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Write your post content here..."></textarea>
+			</div>
+			<button type="submit" class="btn-primary">Create Post</button>
+		</div>
+	</form>
+}

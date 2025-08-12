@@ -1,0 +1,23 @@
+package views
+ 
+import (
+	"domi.ninja/example-project/frontend/components"
+	"domi.ninja/example-project/internal/db_generated"
+)
+
+templ Posts(posts []db_generated.Post) {
+	<div class="">
+	
+		@components.PostForm() 
+
+		<div class="p-8">
+			<h1 class="text-2xl font-bold text-on-surface-strong mb-8">Recent Posts</h1>
+
+			<div id="post-list" class="flex flex-col gap-6">
+				for _, post := range posts {
+					@Post(post)
+				}
+			</div>
+		</div>
+	</div>
+}
