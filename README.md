@@ -53,7 +53,7 @@ $ tree -L 2
     ├── config.go                   config parser
     ├── env_dev.go                  prod vs dev compile time differences example
     ├── env_prod.go                 ^
-    ├── logger.go                   logger middleware that helps find unhandled crashes
+    ├── logger.go                   logger middleware that helps find where in the code things happen
     ├── render.go                   wrapping templ rendering in case we need that 
     ├── utils.go
     └── webhelp.go
