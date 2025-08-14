@@ -21,7 +21,7 @@ The whole fun of doing full-stack go is cooking your own stack. There are some l
 $ tree -L 2
 .
 ├── app.go                      entry point and routing
-├── app.toml                    config file for 
+├── app.toml                    config file for our app
 ├── cmd
 │   └── server                  
 ├── data.db                     sqlite3 db file for development
