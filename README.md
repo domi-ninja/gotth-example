@@ -65,8 +65,18 @@ $ tree -L 2
 - Makefile 
 
 
-## Why is there no auth in this?
+## PRs welcome
 
-It adds a ton of complexity, and maybe you don't even want to roll your own auth.
+This is a very small example, not a fully featured template. I have not researched if a good one exists.  
+This may never change since golang is very well suited to handknitted software like this. Still, one never knows
+
+**Missing features that would be cool to have**
+
+- [ ] Auth via a provider
+- [ ] Auth, handrolled, but convering all the weird edge cases
+- [ ] File upload using a configured S3 service
+- [ ] A nice way to do form validation
+- [ ] Common frontend components, e.g. Date and Calendar, using something like [daisyui](https://daisyui.com/htmx-component-library/) perhaps?
+- [ ] Some sort of deployment story in addition to "golang can compile everything into a blob, figure it out yourself"
 
 
