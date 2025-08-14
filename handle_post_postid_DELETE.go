@@ -6,24 +6,31 @@ import (
 
 	"domi.ninja/example-project/frontend/views"
 	"domi.ninja/example-project/internal/db_generated"
+	"domi.ninja/example-project/webhelp"
 	"github.com/go-chi/chi/v5"
 )
 
-func (a *App) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request) {
+func (app *App) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request) {
 
 	postId := chi.URLParam(r, "postId")
 
-	post, err := a.db.GetPostById(r.Context(), postId)
+	post, err := app.db.GetPostById(r.Context(), postId)
 	if err != nil {
 		RespondWithError(w, http.StatusNotFound)
 		log.Print("error getting post for delete: ", err, " postId: ", postId)
 		return
 	}
 
-	// TODO security check
-	a.db.DeletePost(r.Context(), post.ID)
+	// TODO add security check for deleting posts here
+	//if !post.Author == currentUser.id {
+	//	RespondWithError(w, http.StatusForbidden)
+	//	log.Print("user is not owner of post: ", postId)
+	//	return
+	//}
 
-	posts, err := a.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
+	app.db.DeletePost(r.Context(), post.ID)
+
+	posts, err := app.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,
 		PageSize:     10,
 	})
@@ -35,7 +42,7 @@ func (a *App) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postsView := views.Posts(posts)
-	err = postsView.Render(r.Context(), w)
+	err = webhelp.RenderHTML(r.Context(), w, postsView)
 	if err != nil {
 		RespondWithError(w, http.StatusInternalServerError)
 		return

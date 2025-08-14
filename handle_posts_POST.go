@@ -7,17 +7,18 @@ import (
 
 	"domi.ninja/example-project/frontend/views"
 	"domi.ninja/example-project/internal/db_generated"
+	"domi.ninja/example-project/webhelp"
 	"github.com/google/uuid"
 )
 
-func (a *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
+func (app *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 
 	post := db_generated.Post{
 		Title: r.FormValue("title"),
 		Body:  r.FormValue("body"),
 	}
 
-	a.db.CreatePost(r.Context(), db_generated.CreatePostParams{
+	app.db.CreatePost(r.Context(), db_generated.CreatePostParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		Title:     post.Title,
@@ -25,7 +26,7 @@ func (a *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 		Author:    post.Author,
 	})
 
-	posts, err := a.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
+	posts, err := app.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,
 		PageSize:     10,
 	})
@@ -37,7 +38,7 @@ func (a *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postsView := views.Posts(posts)
-	err = postsView.Render(r.Context(), w)
+	err = webhelp.RenderHTML(r.Context(), w, postsView)
 	if err != nil {
 		RespondWithError(w, http.StatusInternalServerError)
 		return

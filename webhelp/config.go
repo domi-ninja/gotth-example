@@ -18,11 +18,8 @@ type AppConfig struct {
 
 	Site SiteConfig `toml:"site"`
 
-	Assets struct {
-		Path string `toml:"path"`
-	} `toml:"assets"`
-
 	Secrets struct {
+		// will be filled from .env file or actual env vars
 		JWT_SECRET string
 	}
 }
@@ -31,10 +28,10 @@ type AppConfig struct {
 type SiteConfig struct {
 	AppPath string `toml:"app_path"`
 
-	Title        string `toml:"title"`
-	Description  string `toml:"description"`
-	DefaultImage string `toml:"default_image"`
-	Keywords     string `toml:"keywords"`
+	Title       string `toml:"title"`
+	Description string `toml:"description"`
+	Image       string `toml:"default_image"`
+	Keywords    string `toml:"keywords"`
 }
 
 func MustLoadConfig(path string) *AppConfig {
@@ -53,18 +50,19 @@ func MustLoadConfig(path string) *AppConfig {
 	if err != nil {
 		log.Print("Error loading .env file")
 	}
-	// TODO: make sure we have a jwt secret (instead of empty string or something)
-	// config.Secrets.JWT_SECRET = os.Getenv("JWT_SECRET")
-	// if len(config.Secrets.JWT_SECRET) < 32 {
-	// 	log.Fatal("JWT_SECRET with len >= 32 is required, auth is not secure without it")
-	// }
+	// make sure we have a jwt secret (instead of empty string or something)
+	config.Secrets.JWT_SECRET = os.Getenv("JWT_SECRET")
+	if len(config.Secrets.JWT_SECRET) < 32 {
+		log.Fatal("JWT_SECRET with len >= 32 is required, auth is not secure without it")
+	}
+
 	if config.Site.Title == "" {
 		log.Fatal("site.title is required")
 	}
 	if config.Site.Description == "" {
 		log.Fatal("site.description is required")
 	}
-	if config.Site.DefaultImage == "" {
+	if config.Site.Image == "" {
 		log.Fatal("site.default_image is required")
 	}
 	if config.Site.Keywords == "" {

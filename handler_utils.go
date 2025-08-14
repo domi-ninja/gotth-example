@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -12,7 +11,7 @@ func RespondWithText(contentType string, w http.ResponseWriter, code int, text s
 	w.Write([]byte(text))
 }
 
-func RespondWithJson(w http.ResponseWriter, code int, payload interface{}) {
+func RespondWithJson(w http.ResponseWriter, code int, payload any) {
 	response, _ := json.Marshal(payload)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
@@ -21,35 +20,10 @@ func RespondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 
 // renders generic error message for a given http status code, does not leak internal error details
 func RespondWithError(w http.ResponseWriter, code int) {
-	errMsg := "error"
-	if code < 400 {
-		log.Fatalf("Argument error, think about what you are doing here.")
-	}
+	errMsg := http.StatusText(code)
 
-	if code == http.StatusUnauthorized {
-		w.Header().Set("WWW-Authenticate", "Basic realm=\"Restricted\"")
-		errMsg = "Unauthorized"
-	}
-
-	if code == http.StatusForbidden {
-		errMsg = "Forbidden"
-	}
-
-	if code == http.StatusNotFound {
-		errMsg = "Not Found"
-	}
-
-	if code == http.StatusInternalServerError {
-		errMsg = "Internal Server Error"
-	}
-
-	if code == http.StatusBadRequest {
-		errMsg = "Bad Request"
-	}
-
-	if code == http.StatusUnauthorized {
-		errMsg = "Unauthorized"
-	}
+	// TODO consider catching some errors here and not returning the raw status code to make it harder
+	// to hack the app
 
 	w.WriteHeader(code)
 	w.Write([]byte(errMsg))

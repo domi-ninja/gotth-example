@@ -23,8 +23,8 @@ templ Master(mainContent templ.Component, headerContent templ.Component, siteDat
 
 			<title>{ siteData.Title }</title>
 			<link rel="stylesheet" href={ siteData.AppPath + "/assets/style.css?v=" + version }/>
-			<link rel="icon" type="image/png" href={ siteData.DefaultImage }/>
-			<meta property="og:image" content={ siteData.AppPath + siteData.DefaultImage + "?v=" + version }/>
+			<link rel="icon" type="image/png" href={ siteData.Image }/>
+			<meta property="og:image" content={ siteData.AppPath + siteData.Image + "?v=" + version }/>
 			<meta property="og:type" content="website"/>
 			<meta property="og:title" content={ seoData.Title }/>
 			<meta property="og:description" content={ seoData.Description }/>

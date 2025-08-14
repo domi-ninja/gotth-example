@@ -8,11 +8,10 @@ root=""
 app_path = "" 
 
 # data for site header and also SEO/opengraph
-title = "Gotths comments"
-description = "This is my cool forum page!"
+title = "Gotths App"
+description = "Cool forum app"
 default_image = "/img/assets/logo.jpg"
 keywords = "Forum, Anonymous, Sample App"
-# author = ""
 
 [cache]
 default_expiration = "5m"

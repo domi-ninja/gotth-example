@@ -8,6 +8,7 @@ import (
 	"domi.ninja/example-project/frontend/layouts"
 	"domi.ninja/example-project/frontend/views"
 	"domi.ninja/example-project/internal/db_generated"
+	"domi.ninja/example-project/webhelp"
 )
 
 func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
@@ -31,8 +32,7 @@ func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Create master layout with header and view
 	component := layouts.Master(postsView, header, app.cfg.Site, app.cfg.Site, app.version)
 
-	w.Header().Set("Content-Type", "text/html")
-	err = component.Render(r.Context(), w)
+	err = webhelp.RenderHTML(r.Context(), w, component)
 	if err != nil {
 		log.Print("error rendering posts: ", err)
 		RespondWithError(w, http.StatusInternalServerError)
