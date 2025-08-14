@@ -42,12 +42,12 @@ The whole fun of doing full-stack go is cooking your own stack. There are some l
 │   ├── migrations              numbered goose migrations
 │   └── query                   named sqlc queries
 ├── sqlc.yaml
-└── webapp                      some minimal framework stuff that might be reused
+└── webhelp                     some minimal framework stuff that might be reused
     ├── auth.go
     ├── config.go
     ├── logger.go
     ├── utils.go
-    └── webapp.go
+    └── webhelp.go
 
 15 directories, 23 files
 

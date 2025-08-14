@@ -1,12 +1,12 @@
 package layouts
-import "domi.ninja/example-project/webapp"
+import "domi.ninja/example-project/webhelp"
 
 // viewContent: the view to render
 // headerContent: optional, the header to render
 // siteData: global config
 // seoData: global or page specific
 // version: the version of the app, used for cache busting
-templ Master(mainContent templ.Component, headerContent templ.Component, siteData webapp.SiteConfig, seoData webapp.SiteConfig, version string) {
+templ Master(mainContent templ.Component, headerContent templ.Component, siteData webhelp.SiteConfig, seoData webhelp.SiteConfig, version string) {
     
 
 	<!DOCTYPE html>
@@ -47,7 +47,7 @@ templ Master(mainContent templ.Component, headerContent templ.Component, siteDat
 			<!-- main js -->
 			<script src={ siteData.AppPath + "/assets/js/main.js?v=" + version }></script>
 			
-            if webapp.DevMode() {
+            if webhelp.DevMode() {
 				<script src={ siteData.AppPath + "/assets/js/reload.js?v=" + version }></script>
 			}
 

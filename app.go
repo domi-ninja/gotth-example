@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"domi.ninja/example-project/webapp"
+	"domi.ninja/example-project/webhelp"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -18,8 +18,8 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
-type WebApp struct {
-	cfg *webapp.AppConfig
+type App struct {
+	cfg *webhelp.AppConfig
 
 	db *db_generated.Queries
 
@@ -29,10 +29,10 @@ type WebApp struct {
 
 func Run() {
 	// pretty verbose logger but it helps to find where panics happend as well as logging all request
-	webapp.UseLogger()
+	webhelp.UseLogger()
 
 	// toml config file for set settings, url etc.
-	cfg := webapp.MustLoadConfig("./app.toml")
+	cfg := webhelp.MustLoadConfig("./app.toml")
 
 	// db connection
 	dbConn, err := sql.Open("sqlite", "./data.db")
@@ -44,11 +44,11 @@ func Run() {
 	}
 
 	// give our http route handlers the stuff they need
-	app := &WebApp{
+	app := &App{
 		db:  db_generated.New(dbConn),
 		cfg: cfg,
 
-		version:  webapp.BuildRandomNumber,
+		version:  webhelp.BuildRandomNumber,
 		memcache: cache.New(5*time.Minute, 10*time.Minute),
 	}
 
@@ -57,7 +57,7 @@ func Run() {
 	// define golang app logger
 	router.Use(middleware.RequestID)
 	router.Use(middleware.RealIP)
-	router.Use(webapp.LoggerMiddleware)
+	router.Use(webhelp.LoggerMiddleware)
 	router.Use(middleware.Recoverer)
 
 	router.Use(middleware.Timeout(60 * time.Second))
@@ -71,7 +71,7 @@ func Run() {
 	}))
 
 	// maybe some jwt auth stuff on the router?
-	// router.Use(jwtauth.Verifier(webapp.tokenAuth))
+	// router.Use(jwtauth.Verifier(webhelp.tokenAuth))
 
 	// Serve static files directory
 	fileServerStatic := http.FileServer(http.Dir("./frontend/assets"))
@@ -86,7 +86,7 @@ func Run() {
 	// crud routes
 	router.Post("/posts", app.HandlePosts_POST)
 
-	if webapp.DevMode() {
+	if webhelp.DevMode() {
 		router.Get("/reload", app.HandleReload_WS)
 	}
 
@@ -95,7 +95,7 @@ func Run() {
 
 	// maybe some admin routes on /admin?
 	// Bundle your routes in a separate file and chi route bundle thing
-	// router.Route("/admin", webapp.adminRoutes)
+	// router.Route("/admin", adminRoutes)
 
 	// Listen
 	bindAddr := app.cfg.Server.BindAddress + ":" + fmt.Sprint(app.cfg.Server.Port)

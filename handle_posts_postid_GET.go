@@ -9,10 +9,10 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (webapp *WebApp) HandlePost_PostId_GET(w http.ResponseWriter, r *http.Request) {
+func (a *App) HandlePost_PostId_GET(w http.ResponseWriter, r *http.Request) {
 	postId := chi.URLParam(r, "postId")
 
-	post, err := webapp.db.GetPostById(r.Context(), postId)
+	post, err := a.db.GetPostById(r.Context(), postId)
 	if err != nil {
 		RespondWithError(w, http.StatusNotFound)
 		log.Print("error getting post: ", err)
@@ -20,6 +20,6 @@ func (webapp *WebApp) HandlePost_PostId_GET(w http.ResponseWriter, r *http.Reque
 	}
 
 	postView := views.Post(post)
-	master := layouts.Master(postView, nil, webapp.cfg.Site, webapp.cfg.Site, webapp.version)
+	master := layouts.Master(postView, nil, a.cfg.Site, a.cfg.Site, a.version)
 	master.Render(r.Context(), w)
 }

@@ -9,11 +9,11 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (webapp *WebApp) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request) {
+func (a *App) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request) {
 
 	postId := chi.URLParam(r, "postId")
 
-	post, err := webapp.db.GetPostById(r.Context(), postId)
+	post, err := a.db.GetPostById(r.Context(), postId)
 	if err != nil {
 		RespondWithError(w, http.StatusNotFound)
 		log.Print("error getting post for delete: ", err, " postId: ", postId)
@@ -21,9 +21,9 @@ func (webapp *WebApp) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Re
 	}
 
 	// TODO security check
-	webapp.db.DeletePost(r.Context(), post.ID)
+	a.db.DeletePost(r.Context(), post.ID)
 
-	posts, err := webapp.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
+	posts, err := a.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,
 		PageSize:     10,
 	})

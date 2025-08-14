@@ -1,6 +1,6 @@
 //go:build !production
 
-package webapp
+package webhelp
 
 func DevMode() bool {
 	return true

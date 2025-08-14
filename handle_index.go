@@ -10,12 +10,12 @@ import (
 	"domi.ninja/example-project/internal/db_generated"
 )
 
-func (webapp *WebApp) HandleIndex(w http.ResponseWriter, r *http.Request) {
+func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Create header component with toggle dark
 	toggleDark := components.ToggleDark()
-	header := layouts.Header(webapp.cfg.Site, toggleDark)
+	header := layouts.Header(app.cfg.Site, toggleDark)
 
-	posts, err := webapp.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
+	posts, err := app.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,
 		PageSize:     10,
 	})
@@ -29,7 +29,7 @@ func (webapp *WebApp) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	postsView := views.Posts(posts)
 
 	// Create master layout with header and view
-	component := layouts.Master(postsView, header, webapp.cfg.Site, webapp.cfg.Site, webapp.version)
+	component := layouts.Master(postsView, header, app.cfg.Site, app.cfg.Site, app.version)
 
 	w.Header().Set("Content-Type", "text/html")
 	err = component.Render(r.Context(), w)

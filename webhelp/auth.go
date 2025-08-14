@@ -1,4 +1,4 @@
-package webapp
+package webhelp
 
 import (
 	"net/http"

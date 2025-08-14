@@ -10,14 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
-func (webapp *WebApp) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
+func (a *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 
 	post := db_generated.Post{
 		Title: r.FormValue("title"),
 		Body:  r.FormValue("body"),
 	}
 
-	webapp.db.CreatePost(r.Context(), db_generated.CreatePostParams{
+	a.db.CreatePost(r.Context(), db_generated.CreatePostParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		Title:     post.Title,
@@ -25,7 +25,7 @@ func (webapp *WebApp) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 		Author:    post.Author,
 	})
 
-	posts, err := webapp.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
+	posts, err := a.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,
 		PageSize:     10,
 	})

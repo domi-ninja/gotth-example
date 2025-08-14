@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func (webapp *WebApp) HandleReload_WS(w http.ResponseWriter, r *http.Request) {
+func (app *App) HandleReload_WS(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			return true
@@ -21,7 +21,7 @@ func (webapp *WebApp) HandleReload_WS(w http.ResponseWriter, r *http.Request) {
 
 	defer conn.Close()
 
-	conn.WriteMessage(websocket.TextMessage, []byte(webapp.version))
+	conn.WriteMessage(websocket.TextMessage, []byte(app.version))
 
 	for {
 		// keep the connection open while we are running
