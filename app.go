@@ -79,12 +79,28 @@ func Run() {
 	router.Handle("/assets/*", http.StripPrefix("/assets/", fileServerStatic))
 	router.Handle("/uploads/*", http.StripPrefix("/uploads/", fileServerUploads))
 
+	// Authentication routes (public)
+	router.Get("/login", app.HandleLogin_GET)
+	router.Get("/register", app.HandleRegister_GET)
+	router.Post("/auth/register", app.HandleRegister_POST)
+	router.Post("/auth/login", app.HandleLogin_POST)
+	router.Post("/auth/logout", app.HandleLogout_POST)
+	router.Get("/auth/me", app.HandleMe_GET)
+
 	// parameterised routes need to be registered before the root route
 	router.Get("/post/{postId}", app.HandlePost_PostId_GET)
 	router.Delete("/post/{postId}", app.HandlePost_PostId_DELETE)
 
 	// crud routes
 	router.Post("/posts", app.HandlePosts_POST)
+
+	// Protected routes (require authentication)
+	router.Group(func(r chi.Router) {
+		r.Use(app.RequireAuth)
+		// Add protected routes here, for example:
+		// r.Get("/dashboard", app.HandleDashboard_GET)
+		// r.Post("/posts", app.HandlePosts_POST) // if you want posts to be protected
+	})
 
 	if webhelp.DevMode() {
 		router.Get("/reload", app.HandleReload_WS)

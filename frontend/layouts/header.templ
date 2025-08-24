@@ -2,7 +2,7 @@ package layouts
 
 import "domi.ninja/example-project/webhelp"
 
-templ Header(siteData webhelp.SiteConfig, toggleDarkComponent templ.Component) {
+templ Header(siteData webhelp.SiteConfig, toggleDarkComponent templ.Component, userEmail string) {
 	<header class="bg-surface-alt flex flex-row justify-between items-center gap-4 px-8 py-4 border-b border-outline shadow-sm text-foreground">
 		<div class="flex items-baseline gap-6">
 			<h1 class="text-2xl font-bold text-on-surface-strong">
@@ -14,12 +14,61 @@ templ Header(siteData webhelp.SiteConfig, toggleDarkComponent templ.Component) {
 				{ siteData.Description }
 			</h2>
 		</div>
-		<div class="flex items-center">
+		<div class="flex items-center gap-4">
+			if userEmail != "" {
+				<!-- User is logged in -->
+				<div class="flex items-center gap-4">
+					<span class="text-on-surface text-sm">Welcome, { userEmail }</span>
+					<button 
+						onclick="logout()" 
+						class="px-3 py-1 text-sm bg-secondary text-on-secondary rounded hover:bg-secondary-variant transition-colors"
+					>
+						Logout
+					</button>
+				</div>
+			} else {
+				<!-- User is not logged in -->
+				<div class="flex items-center gap-2">
+					<a 
+						href="/login" 
+						class="px-3 py-1 text-sm text-primary hover:text-primary-variant transition-colors"
+					>
+						Login
+					</a>
+					<a 
+						href="/register" 
+						class="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary-variant transition-colors"
+					>
+						Register
+					</a>
+				</div>
+			}
 			if toggleDarkComponent != nil {
 				@toggleDarkComponent
-			} else {
-				<div class="text-on-surface opacity-50">Theme toggle unavailable</div>
 			}
 		</div>
 	</header>
+	
+	if userEmail != "" {
+		<script>
+			async function logout() {
+				try {
+					const response = await fetch('/auth/logout', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
+					
+					if (response.ok) {
+						window.location.href = '/';
+					} else {
+						alert('Logout failed');
+					}
+				} catch (error) {
+					alert('Network error during logout');
+				}
+			}
+		</script>
+	}
 }

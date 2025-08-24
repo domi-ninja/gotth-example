@@ -23,8 +23,9 @@ type Post struct {
 }
 
 type User struct {
-	ID        interface{}
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Email     string
+	ID           interface{}
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	Email        string
+	PasswordHash string
 }

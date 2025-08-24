@@ -11,31 +11,38 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-insert into users (id, created_at, email)
-values (?, ?, ? )
-returning id, created_at, updated_at, email
+insert into users (id, created_at, email, password_hash)
+values (?, ?, ?, ?)
+returning id, created_at, updated_at, email, password_hash
 `
 
 type CreateUserParams struct {
-	ID        interface{}
-	CreatedAt time.Time
-	Email     string
+	ID           interface{}
+	CreatedAt    time.Time
+	Email        string
+	PasswordHash string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.ID, arg.CreatedAt, arg.Email)
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.ID,
+		arg.CreatedAt,
+		arg.Email,
+		arg.PasswordHash,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Email,
+		&i.PasswordHash,
 	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, created_at, updated_at, email
+SELECT id, created_at, updated_at, email, password_hash
 FROM users 
 WHERE email = ?
 `
@@ -48,12 +55,32 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Email,
+		&i.PasswordHash,
+	)
+	return i, err
+}
+
+const getUserByEmailWithPassword = `-- name: GetUserByEmailWithPassword :one
+SELECT id, created_at, updated_at, email, password_hash
+FROM users 
+WHERE email = ?
+`
+
+func (q *Queries) GetUserByEmailWithPassword(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmailWithPassword, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Email,
+		&i.PasswordHash,
 	)
 	return i, err
 }
 
 const getUserById = `-- name: GetUserById :one
-SELECT id, created_at, updated_at, email
+SELECT id, created_at, updated_at, email, password_hash
 FROM users 
 WHERE id = ?
 `
@@ -66,6 +93,7 @@ func (q *Queries) GetUserById(ctx context.Context, id interface{}) (User, error)
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Email,
+		&i.PasswordHash,
 	)
 	return i, err
 }

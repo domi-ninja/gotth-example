@@ -12,9 +12,12 @@ import (
 )
 
 func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
+	// Get current user email for header
+	userEmail := app.GetCurrentUserEmail(r)
+
 	// Create header component with toggle dark
 	toggleDark := components.ToggleDark()
-	header := layouts.Header(app.cfg.Site, toggleDark)
+	header := layouts.Header(app.cfg.Site, toggleDark, userEmail)
 
 	posts, err := app.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,

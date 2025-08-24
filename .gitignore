@@ -7,8 +7,8 @@ data.db
 frontend/assets/style.css
 *_templ.go
 bin/app
-.cursor/rules
-.cursor
+.cursor/rules/*.mdc
+!.cursor/rules/gotths_rules.mdc
 AGENTS.md
 CLAUDE.md
 GEMINI.md

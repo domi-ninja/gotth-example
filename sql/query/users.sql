@@ -1,6 +1,6 @@
 -- name: CreateUser :one
-insert into users (id, created_at, email)
-values (?, ?, ? )
+insert into users (id, created_at, email, password_hash)
+values (?, ?, ?, ?)
 returning *;
 
 -- name: GetUserByEmail :one
@@ -12,3 +12,8 @@ WHERE email = ?;
 SELECT *
 FROM users 
 WHERE id = ?;
+
+-- name: GetUserByEmailWithPassword :one
+SELECT *
+FROM users 
+WHERE email = ?;
