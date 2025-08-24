@@ -14,7 +14,8 @@ templ Register() {
 					</a>
 				</p>
 			</div>
-			<form action="/auth/register" method="POST" enctype="multipart/form-data" class="mt-8 space-y-6">
+			<div id="register-error"></div>
+			<form class="mt-8 space-y-6" hx-post="/auth/register" hx-target="#register-error" hx-swap="innerHTML" enctype="multipart/form-data">
 				<div class="rounded-md shadow-sm -space-y-px">
 					<div>
 						<label for="email" class="sr-only">Email address</label>
@@ -36,9 +37,9 @@ templ Register() {
 							type="password" 
 							autocomplete="new-password" 
 							required 
-							minlength="6"
+							minlength="12"
 							class="appearance-none rounded-none relative block w-full px-3 py-2 border border-outline placeholder-on-surface text-on-surface rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm bg-surface" 
-							placeholder="Password (min 6 characters)"
+							placeholder="Password (min 12 characters)"
 						/>
 					</div>
 				</div>

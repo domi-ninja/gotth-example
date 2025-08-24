@@ -10,7 +10,7 @@ import (
 func (app *App) HandleMe_GET(w http.ResponseWriter, r *http.Request) {
 	claims, err := app.GetCurrentUser(r)
 	if err != nil {
-		app.respondWithError(w, http.StatusUnauthorized, "Not authenticated")
+		RespondWithHtmlError(w, r, http.StatusOK, "Not authenticated")
 		return
 	}
 
@@ -18,7 +18,7 @@ func (app *App) HandleMe_GET(w http.ResponseWriter, r *http.Request) {
 	user, err := app.db.GetUserById(r.Context(), claims.UserID)
 	if err != nil {
 		log.Printf("Error getting user by ID: %v", err)
-		app.respondWithError(w, http.StatusInternalServerError, "Internal server error")
+		RespondWithHtmlError(w, r, http.StatusOK, "Internal server error")
 		return
 	}
 

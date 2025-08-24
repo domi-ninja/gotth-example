@@ -11,7 +11,7 @@ import (
 func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 	// Parse multipart form
 	if err := r.ParseMultipartForm(32 << 20); err != nil { // 32 MB max memory
-		app.respondWithError(w, http.StatusBadRequest, "Invalid form data")
+		RespondWithHtmlError(w, r, http.StatusBadRequest, "Invalid form data")
 		return
 	}
 
@@ -21,25 +21,25 @@ func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 
 	// Basic validation
 	if email == "" || password == "" {
-		app.respondWithError(w, http.StatusBadRequest, "Email and password are required")
+		RespondWithHtmlError(w, r, http.StatusOK, "Email and password are required")
 		return
 	}
 
 	// Get user by email
 	user, err := app.db.GetUserByEmailWithPassword(r.Context(), email)
 	if err == sql.ErrNoRows {
-		app.respondWithError(w, http.StatusUnauthorized, "Invalid email or password")
+		RespondWithHtmlError(w, r, http.StatusOK, "Invalid email or password")
 		return
 	}
 	if err != nil {
 		log.Printf("Database error getting user: %v", err)
-		app.respondWithError(w, http.StatusInternalServerError, "Internal server error")
+		RespondWithHtmlError(w, r, http.StatusOK, "Internal server error")
 		return
 	}
 
 	// Check password
 	if !app.CheckPasswordHash(password, user.PasswordHash) {
-		app.respondWithError(w, http.StatusUnauthorized, "Invalid email or password")
+		RespondWithHtmlError(w, r, http.StatusOK, "Invalid email or password")
 		return
 	}
 
@@ -47,7 +47,7 @@ func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 	token, err := app.GenerateJWT(user.ID.(string), user.Email)
 	if err != nil {
 		log.Printf("Error generating JWT: %v", err)
-		app.respondWithError(w, http.StatusInternalServerError, "Internal server error")
+		RespondWithHtmlError(w, r, http.StatusInternalServerError, "Internal server error")
 		return
 	}
 

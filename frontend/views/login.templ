@@ -14,7 +14,8 @@ templ Login() {
 					</a>
 				</p>
 			</div>
-			<form action="/auth/login" method="POST" enctype="multipart/form-data" class="mt-8 space-y-6">
+			<div id="login-error"></div>
+			<form class="mt-8 space-y-6" hx-post="/auth/login" hx-target="#login-error" hx-swap="innerHTML" enctype="multipart/form-data">
 				<div class="rounded-md shadow-sm -space-y-px">
 					<div>
 						<label for="email" class="sr-only">Email address</label>

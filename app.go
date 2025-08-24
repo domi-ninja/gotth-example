@@ -84,6 +84,7 @@ func Run() {
 	// Authentication routes (public)
 	router.Get("/login", app.HandleLogin_GET)
 	router.Get("/register", app.HandleRegister_GET)
+
 	router.Post("/auth/register", app.HandleRegister_POST)
 	router.Post("/auth/login", app.HandleLogin_POST)
 	router.Post("/auth/logout", app.HandleLogout_POST)

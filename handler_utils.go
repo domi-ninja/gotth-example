@@ -2,7 +2,11 @@ package app
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+
+	"domi.ninja/example-project/frontend/components"
+	"domi.ninja/example-project/webhelp"
 )
 
 func RespondWithText(contentType string, w http.ResponseWriter, code int, text string) {
@@ -27,4 +31,16 @@ func RespondWithError(w http.ResponseWriter, code int) {
 
 	w.WriteHeader(code)
 	w.Write([]byte(errMsg))
+}
+
+func RespondWithHtmlError(w http.ResponseWriter, r *http.Request, code int, message string) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(message))
+
+	err := webhelp.RenderHTML(r.Context(), w, components.Error(message))
+	if err != nil {
+		log.Print("error rendering posts: ", err)
+		RespondWithError(w, http.StatusInternalServerError)
+		return
+	}
 }

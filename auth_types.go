@@ -1,8 +1,6 @@
 package app
 
 import (
-	"encoding/json"
-	"net/http"
 	"time"
 )
 
@@ -30,17 +28,4 @@ type UserResponse struct {
 	ID        string    `json:"id"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
-}
-
-// Helper function to respond with JSON error
-func (app *App) respondWithError(w http.ResponseWriter, statusCode int, message string) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-
-	response := AuthResponse{
-		Success: false,
-		Message: message,
-	}
-
-	json.NewEncoder(w).Encode(response)
 }
