@@ -1,4 +1,4 @@
-package app
+package webhelp
 
 import (
 	"context"
@@ -32,7 +32,7 @@ func GetUserEmailFromContext(ctx context.Context) (string, bool) {
 }
 
 // GetCurrentUserEmail safely gets the current user's email, returns empty string if not logged in
-func (app *App) GetCurrentUserEmail(r *http.Request) string {
+func (app *Wapp) GetCurrentUserEmail(r *http.Request) string {
 	claims, err := app.GetCurrentUser(r)
 	if err != nil {
 		return ""

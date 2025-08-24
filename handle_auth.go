@@ -69,7 +69,7 @@ func (app *App) HandleRegister_POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Hash the password
-	hashedPassword, err := HashPassword(req.Password)
+	hashedPassword, err := app.HashPassword(req.Password)
 	if err != nil {
 		log.Printf("Error hashing password: %v", err)
 		app.respondWithError(w, http.StatusInternalServerError, "Internal server error")
@@ -143,7 +143,7 @@ func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check password
-	if !CheckPasswordHash(req.Password, user.PasswordHash) {
+	if !app.CheckPasswordHash(req.Password, user.PasswordHash) {
 		app.respondWithError(w, http.StatusUnauthorized, "Invalid email or password")
 		return
 	}

@@ -19,13 +19,13 @@ func (app *App) HandleLogin_GET(w http.ResponseWriter, r *http.Request) {
 
 	// Create header component with toggle dark (no user email for login page)
 	toggleDark := components.ToggleDark()
-	header := layouts.Header(app.cfg.Site, toggleDark, "")
+	header := layouts.Header(app.Cfg.Site, toggleDark, "")
 
 	// Create login view
 	loginView := views.Login()
 
 	// Create master layout with header and view
-	component := layouts.Master(loginView, header, app.cfg.Site, app.cfg.Site, app.version)
+	component := layouts.Master(loginView, header, app.Cfg.Site, app.Cfg.Site, app.version)
 
 	err := webhelp.RenderHTML(r.Context(), w, component)
 	if err != nil {

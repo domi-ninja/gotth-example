@@ -17,7 +17,7 @@ func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
 
 	// Create header component with toggle dark
 	toggleDark := components.ToggleDark()
-	header := layouts.Header(app.cfg.Site, toggleDark, userEmail)
+	header := layouts.Header(app.Cfg.Site, toggleDark, userEmail)
 
 	posts, err := app.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
 		PagingOffset: 0,
@@ -33,7 +33,7 @@ func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	postsView := views.Posts(posts)
 
 	// Create master layout with header and view
-	component := layouts.Master(postsView, header, app.cfg.Site, app.cfg.Site, app.version)
+	component := layouts.Master(postsView, header, app.Cfg.Site, app.Cfg.Site, app.version)
 
 	err = webhelp.RenderHTML(r.Context(), w, component)
 	if err != nil {

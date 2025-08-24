@@ -20,7 +20,7 @@ func (app *App) HandlePost_PostId_GET(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postSpecificSeoData := app.cfg.Site
+	postSpecificSeoData := app.Cfg.Site
 	postSpecificSeoData.Title = post.Title
 	if len(post.Body) > 100 {
 		postSpecificSeoData.Description = post.Body[:100] + "..."
@@ -32,6 +32,6 @@ func (app *App) HandlePost_PostId_GET(w http.ResponseWriter, r *http.Request) {
 	// postSpecificSeoData.Keywords = post.Keywords
 
 	postView := views.Post(post)
-	master := layouts.Master(postView, nil, app.cfg.Site, postSpecificSeoData, app.version)
+	master := layouts.Master(postView, nil, app.Cfg.Site, postSpecificSeoData, app.version)
 	webhelp.RenderHTML(r.Context(), w, master)
 }

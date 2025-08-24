@@ -7,19 +7,18 @@ import (
 	"net/http"
 	"time"
 
-	"domi.ninja/example-project/webhelp"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	_ "modernc.org/sqlite"
 
 	"domi.ninja/example-project/internal/db_generated"
+	"domi.ninja/example-project/webhelp"
 	"github.com/patrickmn/go-cache"
 )
 
 type App struct {
-	cfg *webhelp.AppConfig
+	webhelp.Wapp
 
 	db *db_generated.Queries
 
@@ -45,8 +44,11 @@ func Run() {
 
 	// give our http route handlers the stuff they need
 	app := &App{
-		db:  db_generated.New(dbConn),
-		cfg: cfg,
+		db: db_generated.New(dbConn),
+
+		Wapp: webhelp.Wapp{
+			Cfg: cfg,
+		},
 
 		version:  webhelp.BuildRandomNumber,
 		memcache: cache.New(5*time.Minute, 10*time.Minute),
@@ -63,7 +65,7 @@ func Run() {
 	router.Use(middleware.Timeout(60 * time.Second))
 
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedOrigins:   []string{"https://*", "ht  tp://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: true,
@@ -117,7 +119,7 @@ func Run() {
 	// router.Route("/admin", adminRoutes)
 
 	// Listen
-	bindAddr := app.cfg.Server.BindAddress + ":" + fmt.Sprint(app.cfg.Server.Port)
+	bindAddr := app.Cfg.Server.BindAddress + ":" + fmt.Sprint(app.Cfg.Server.Port)
 	server := &http.Server{
 		Handler: router,
 		Addr:    bindAddr,

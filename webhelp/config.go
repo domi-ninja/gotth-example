@@ -20,7 +20,8 @@ type AppConfig struct {
 
 	Secrets struct {
 		// will be filled from .env file or actual env vars
-		JWT_SECRET string
+		JWT_SECRET    string
+		PASSWORD_SALT string
 	}
 }
 
