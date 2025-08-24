@@ -93,6 +93,9 @@ func Run() {
 	// root routes
 	router.Get("/", app.HandleIndex)
 
+	// health check route
+	router.Get("/health", app.HandleHealth)
+
 	// maybe some admin routes on /admin?
 	// Bundle your routes in a separate file and chi route bundle thing
 	// router.Route("/admin", adminRoutes)

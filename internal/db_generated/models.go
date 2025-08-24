@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+type Healthcheck struct {
+	ID        interface{}
+	CreatedAt time.Time
+}
+
 type Post struct {
 	ID        interface{}
 	CreatedAt time.Time
