@@ -35,7 +35,7 @@ func RespondWithError(w http.ResponseWriter, code int) {
 
 func RespondWithHtmlError(w http.ResponseWriter, r *http.Request, code int, message string) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(message))
+	// w.Write([]byte(message))
 
 	err := webhelp.RenderHTML(r.Context(), w, components.Error(message))
 	if err != nil {

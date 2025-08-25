@@ -82,16 +82,17 @@ func Run() {
 	router.Handle("/uploads/*", http.StripPrefix("/uploads/", fileServerUploads))
 
 	// Authentication routes (public)
-	router.Get("/login", app.HandleLogin_GET)
-	router.Get("/register", app.HandleRegister_GET)
+	router.Get("/login", app.HandleLogin_VIEW)
+	router.Post("/login", app.HandleLogin_POST)
 
-	router.Post("/auth/register", app.HandleRegister_POST)
-	router.Post("/auth/login", app.HandleLogin_POST)
-	router.Post("/auth/logout", app.HandleLogout_POST)
-	router.Get("/auth/me", app.HandleMe_GET)
+	router.Get("/register", app.HandleRegister_VIEW)
+	router.Post("/register", app.HandleRegister_POST)
+
+	router.Get("/logout", app.HandleLogout_GET)
+	router.Get("/me", app.HandleMe_GET)
 
 	// parameterised routes need to be registered before the root route
-	router.Get("/post/{postId}", app.HandlePost_PostId_GET)
+	router.Get("/post/{postId}", app.HandlePost_PostId_VIEW)
 	router.Delete("/post/{postId}", app.HandlePost_PostId_DELETE)
 
 	// crud routes
@@ -110,7 +111,7 @@ func Run() {
 	}
 
 	// root routes
-	router.Get("/", app.HandleIndex)
+	router.Get("/", app.HandleIndex_VIEW)
 
 	// health check route
 	router.Get("/health", app.HandleHealth)

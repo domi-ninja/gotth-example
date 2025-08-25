@@ -6,6 +6,7 @@ tmp_dir = "./tmp"
   args_bin = []
   bin = "./tmp/main"
   cmd = "go build -o ./tmp/main ./cmd/server"
+
   delay = 1000
   exclude_dir = ["assets", "tmp", "bin", "venv"]
   exclude_file = [ ]
@@ -17,7 +18,7 @@ tmp_dir = "./tmp"
 
   # we rebuild agressively, on js/css stuff as well, because this is how we 
   # currently reload
-  include_ext = ["go", "tpl", "tmpl", "html", "templ", "js", "css", "toml"]
+  include_ext = ["go", "html", "templ", "js", "css", "toml", "sql"]
   
   include_file = []
   kill_delay = "0s"

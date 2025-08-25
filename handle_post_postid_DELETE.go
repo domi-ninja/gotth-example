@@ -17,16 +17,22 @@ func (app *App) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request)
 	post, err := app.db.GetPostById(r.Context(), postId)
 	if err != nil {
 		RespondWithError(w, http.StatusNotFound)
-		log.Print("error getting post for delete: ", err, " postId: ", postId)
+		log.Print("hacking, delete non-existing post: ", err, " postId: ", postId)
 		return
 	}
 
-	// TODO add security check for deleting posts here
-	//if !post.Author == currentUser.id {
-	//	RespondWithError(w, http.StatusForbidden)
-	//	log.Print("user is not owner of post: ", postId)
-	//	return
-	//}
+	user := app.GetCurrentUser(r)
+	if user == nil {
+		log.Print("hacking, delete while logged out", user, postId)
+		RespondWithError(w, http.StatusForbidden)
+		return
+	}
+
+	if post.UserID != user.ID {
+		log.Print("hacking, user is not owner of post ", user, postId)
+		RespondWithError(w, http.StatusForbidden)
+		return
+	}
 
 	app.db.DeletePost(r.Context(), post.ID)
 
@@ -41,7 +47,7 @@ func (app *App) HandlePost_PostId_DELETE(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	postsView := views.Posts(posts)
+	postsView := views.PostsView(posts, user)
 	err = webhelp.RenderHTML(r.Context(), w, postsView)
 	if err != nil {
 		RespondWithError(w, http.StatusInternalServerError)

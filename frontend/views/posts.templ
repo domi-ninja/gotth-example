@@ -3,19 +3,22 @@ package views
 import (
 	"domi.ninja/example-project/frontend/components"
 	"domi.ninja/example-project/internal/db_generated"
+	"domi.ninja/example-project/webhelp"
 )
 
-templ Posts(posts []db_generated.Post) {
+templ PostsView(posts []db_generated.GetPostsPageRow, user *webhelp.Claims) {
 	<div class="">
 	
-		@components.PostForm() 
-
+		if user!=nil {
+			@components.PostForm() 
+		}
 		<div class="p-8">
 			<h1 class="text-2xl font-bold text-on-surface-strong mb-8">Recent Posts</h1>
 
 			<div id="post-list" class="flex flex-col gap-6">
 				for _, post := range posts {
-					@Post(post)
+
+					@PostView(post, user)
 				}
 			</div>
 		</div>

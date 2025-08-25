@@ -2,7 +2,6 @@ package app
 
 import (
 	"database/sql"
-	"encoding/json"
 	"log"
 	"net/http"
 )
@@ -54,17 +53,7 @@ func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 	// Set JWT cookie
 	app.SetJWTCookie(w, token)
 
-	// Respond with success
-	response := AuthResponse{
-		Success: true,
-		Message: "Login successful",
-		User: &UserResponse{
-			ID:        user.ID.(string),
-			Email:     user.Email,
-			CreatedAt: user.CreatedAt,
-		},
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	// redirect to home
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return
 }

@@ -11,9 +11,9 @@ import (
 )
 
 const createPost = `-- name: CreatePost :one
-insert into posts (id, created_at, title, body, author)
+insert into posts (id, created_at, title, body, user_id)
 values (?, ?, ?, ?, ? )
-returning id, created_at, updated_at, title, body, author
+returning id, created_at, updated_at, title, body, user_id
 `
 
 type CreatePostParams struct {
@@ -21,7 +21,7 @@ type CreatePostParams struct {
 	CreatedAt time.Time
 	Title     string
 	Body      string
-	Author    interface{}
+	UserID    interface{}
 }
 
 func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (Post, error) {
@@ -30,7 +30,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (Post, e
 		arg.CreatedAt,
 		arg.Title,
 		arg.Body,
-		arg.Author,
+		arg.UserID,
 	)
 	var i Post
 	err := row.Scan(
@@ -39,7 +39,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (Post, e
 		&i.UpdatedAt,
 		&i.Title,
 		&i.Body,
-		&i.Author,
+		&i.UserID,
 	)
 	return i, err
 }
@@ -55,29 +55,40 @@ func (q *Queries) DeletePost(ctx context.Context, id interface{}) error {
 }
 
 const getPostById = `-- name: GetPostById :one
-SELECT id, created_at, updated_at, title, body, author
-FROM posts 
-WHERE id = ?
+SELECT posts.id, posts.created_at, posts.updated_at, posts.title, posts.body, posts.user_id, users.email
+FROM posts JOIN users ON posts.user_id = users.id
+WHERE posts.id = ?
 `
 
-func (q *Queries) GetPostById(ctx context.Context, id interface{}) (Post, error) {
+type GetPostByIdRow struct {
+	ID        interface{}
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Title     string
+	Body      string
+	UserID    interface{}
+	Email     string
+}
+
+func (q *Queries) GetPostById(ctx context.Context, id interface{}) (GetPostByIdRow, error) {
 	row := q.db.QueryRowContext(ctx, getPostById, id)
-	var i Post
+	var i GetPostByIdRow
 	err := row.Scan(
 		&i.ID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Title,
 		&i.Body,
-		&i.Author,
+		&i.UserID,
+		&i.Email,
 	)
 	return i, err
 }
 
 const getPostsPage = `-- name: GetPostsPage :many
-SELECT id, created_at, updated_at, title, body, author
-FROM posts 
-ORDER BY created_at DESC
+SELECT posts.id, posts.created_at, posts.updated_at, posts.title, posts.body, posts.user_id, users.email
+FROM posts JOIN users ON posts.user_id = users.id
+ORDER BY posts.created_at DESC
   LIMIT ?2 OFFSET ?1
 `
 
@@ -86,22 +97,33 @@ type GetPostsPageParams struct {
 	PageSize     int64
 }
 
-func (q *Queries) GetPostsPage(ctx context.Context, arg GetPostsPageParams) ([]Post, error) {
+type GetPostsPageRow struct {
+	ID        interface{}
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Title     string
+	Body      string
+	UserID    interface{}
+	Email     string
+}
+
+func (q *Queries) GetPostsPage(ctx context.Context, arg GetPostsPageParams) ([]GetPostsPageRow, error) {
 	rows, err := q.db.QueryContext(ctx, getPostsPage, arg.PagingOffset, arg.PageSize)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Post
+	var items []GetPostsPageRow
 	for rows.Next() {
-		var i Post
+		var i GetPostsPageRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Title,
 			&i.Body,
-			&i.Author,
+			&i.UserID,
+			&i.Email,
 		); err != nil {
 			return nil, err
 		}

@@ -18,28 +18,16 @@ templ Header(siteData webhelp.SiteConfig, toggleDarkComponent templ.Component, u
 			if userEmail != "" {
 				<!-- User is logged in -->
 				<div class="flex items-center gap-4">
-					<span class="text-on-surface text-sm">Welcome, { userEmail }</span>
-					<button 
-						onclick="logout()" 
-						class="px-3 py-1 text-sm bg-secondary text-on-secondary rounded hover:bg-secondary-variant transition-colors"
-					>
-						Logout
-					</button>
+					<a href="/me" class="text-on-surface text-sm">{ userEmail }</a>
 				</div>
 			} else {
 				<!-- User is not logged in -->
 				<div class="flex items-center gap-2">
 					<a 
 						href="/login" 
-						class="px-3 py-1 text-sm text-primary hover:text-primary-variant transition-colors"
+						class="btn-primary"
 					>
 						Login
-					</a>
-					<a 
-						href="/register" 
-						class="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary-variant transition-colors"
-					>
-						Register
 					</a>
 				</div>
 			}
@@ -49,26 +37,5 @@ templ Header(siteData webhelp.SiteConfig, toggleDarkComponent templ.Component, u
 		</div>
 	</header>
 	
-	if userEmail != "" {
-		<script>
-			async function logout() {
-				try {
-					const response = await fetch('/auth/logout', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-					});
-					
-					if (response.ok) {
-						window.location.href = '/';
-					} else {
-						alert('Logout failed');
-					}
-				} catch (error) {
-					alert('Network error during logout');
-				}
-			}
-		</script>
-	}
+
 }

@@ -8,8 +8,9 @@ import (
 
 // HandleMe_GET returns current user information
 func (app *App) HandleMe_GET(w http.ResponseWriter, r *http.Request) {
-	claims, err := app.GetCurrentUser(r)
-	if err != nil {
+	claims := app.GetCurrentUser(r)
+
+	if claims == nil {
 		RespondWithHtmlError(w, r, http.StatusOK, "Not authenticated")
 		return
 	}

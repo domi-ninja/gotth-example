@@ -5,6 +5,7 @@
 package db_generated
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -19,7 +20,7 @@ type Post struct {
 	UpdatedAt time.Time
 	Title     string
 	Body      string
-	Author    interface{}
+	UserID    interface{}
 }
 
 type User struct {
@@ -28,4 +29,5 @@ type User struct {
 	UpdatedAt    time.Time
 	Email        string
 	PasswordHash string
+	DisplayName  sql.NullString
 }

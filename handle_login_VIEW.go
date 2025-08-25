@@ -9,9 +9,9 @@ import (
 	"domi.ninja/example-project/webhelp"
 )
 
-func (app *App) HandleLogin_GET(w http.ResponseWriter, r *http.Request) {
+func (app *App) HandleLogin_VIEW(w http.ResponseWriter, r *http.Request) {
 	// Check if user is already logged in
-	if _, err := app.GetCurrentUser(r); err == nil {
+	if user := app.GetCurrentUser(r); user != nil {
 		// User is already logged in, redirect to home
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
@@ -22,7 +22,7 @@ func (app *App) HandleLogin_GET(w http.ResponseWriter, r *http.Request) {
 	header := layouts.Header(app.Cfg.Site, toggleDark, "")
 
 	// Create login view
-	loginView := views.Login()
+	loginView := views.LoginView()
 
 	// Create master layout with header and view
 	component := layouts.Master(loginView, header, app.Cfg.Site, app.Cfg.Site, app.version)

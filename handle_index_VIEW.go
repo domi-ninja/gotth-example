@@ -11,9 +11,13 @@ import (
 	"domi.ninja/example-project/webhelp"
 )
 
-func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
+func (app *App) HandleIndex_VIEW(w http.ResponseWriter, r *http.Request) {
 	// Get current user email for header
-	userEmail := app.GetCurrentUserEmail(r)
+	userEmail := ""
+	user := app.GetCurrentUser(r)
+	if user != nil {
+		userEmail = user.Email
+	}
 
 	// Create header component with toggle dark
 	toggleDark := components.ToggleDark()
@@ -30,7 +34,7 @@ func (app *App) HandleIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postsView := views.Posts(posts)
+	postsView := views.PostsView(posts, user)
 
 	// Create master layout with header and view
 	component := layouts.Master(postsView, header, app.Cfg.Site, app.Cfg.Site, app.version)

@@ -1,6 +1,6 @@
 package views
 
-templ Register() {
+templ RegisterView() {
 	<div class="flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
 			<div>
@@ -15,7 +15,7 @@ templ Register() {
 				</p>
 			</div>
 			<div id="register-error"></div>
-			<form class="mt-8 space-y-6" hx-post="/auth/register" hx-target="#register-error" hx-swap="innerHTML" enctype="multipart/form-data">
+			<form class="mt-8 space-y-6" hx-post="/register" hx-target="#register-error" hx-swap="innerHTML" enctype="multipart/form-data">
 				<div class="rounded-md shadow-sm -space-y-px">
 					<div>
 						<label for="email" class="sr-only">Email address</label>

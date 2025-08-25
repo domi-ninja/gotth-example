@@ -13,6 +13,13 @@ import (
 
 func (app *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 
+	user := app.GetCurrentUser(r)
+	if user == nil {
+		log.Print("hacking, trying to create post while not logged in", r)
+		RespondWithError(w, http.StatusForbidden)
+		return
+	}
+
 	post := db_generated.Post{
 		Title: r.FormValue("title"),
 		Body:  r.FormValue("body"),
@@ -23,7 +30,7 @@ func (app *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 		CreatedAt: time.Now(),
 		Title:     post.Title,
 		Body:      post.Body,
-		Author:    post.Author,
+		UserID:    post.UserID,
 	})
 
 	posts, err := app.db.GetPostsPage(r.Context(), db_generated.GetPostsPageParams{
@@ -37,7 +44,7 @@ func (app *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postsView := views.Posts(posts)
+	postsView := views.PostsView(posts, user)
 	err = webhelp.RenderHTML(r.Context(), w, postsView)
 	if err != nil {
 		RespondWithError(w, http.StatusInternalServerError)

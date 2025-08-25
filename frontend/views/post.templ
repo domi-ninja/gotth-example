@@ -3,9 +3,11 @@ package views
 import (
 	"domi.ninja/example-project/internal/db_generated"
 	"fmt"
+	"domi.ninja/example-project/webhelp"
+
 )
 
-templ Post(post db_generated.Post) {
+templ PostView(post db_generated.GetPostsPageRow, user *webhelp.Claims) {
 	<article class="bg-surface p-8 border border-outline">
 			<div class="flex flex-row justify-between">
 				<a href={ "/post/" + fmt.Sprintf("%v", post.ID) } class="flex flex-row gap-2">
@@ -14,9 +16,9 @@ templ Post(post db_generated.Post) {
 				</a>
 
 				<!-- delete button for testing -->
-				<div hx-delete={ "/post/" + fmt.Sprintf("%v", post.ID) } hx-target="#view">
-					<button class="btn-destructive">Delete Post</button>
-				</div>
+				if post.UserID == "" {
+					@DeleteButton(post);
+				}
 			</div>
 
 		<div class="prose text-on-surface">
@@ -24,4 +26,10 @@ templ Post(post db_generated.Post) {
 		</div>
 	</article>
 		
+}
+
+templ DeleteButton(post db_generated.GetPostsPageRow) {
+<div hx-delete={ "/post/" + fmt.Sprintf("%v", post.ID) } hx-target="#view">
+<button class="btn-destructive">Delete Post</button>
+</div>
 }
