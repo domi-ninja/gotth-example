@@ -14,11 +14,6 @@ import (
 func (app *App) HandlePosts_POST(w http.ResponseWriter, r *http.Request) {
 
 	user := app.GetCurrentUser(r)
-	if user == nil {
-		log.Print("hacking, trying to create post while not logged in", r)
-		RespondWithError(w, http.StatusForbidden)
-		return
-	}
 
 	post := db_generated.Post{
 		Title: r.FormValue("title"),

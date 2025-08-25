@@ -2,6 +2,7 @@ package webhelp
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -36,6 +37,7 @@ func (app *Wapp) ValidateJWT(tokenString string) (*Claims, error) {
 	})
 
 	if err != nil {
+		log.Print("hacking, jwt.ParseWithClaims failed", tokenString, err)
 		return nil, err
 	}
 

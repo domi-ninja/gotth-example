@@ -4,16 +4,14 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"domi.ninja/example-project/webhelp"
 )
 
 // HandleMe_GET returns current user information
 func (app *App) HandleMe_GET(w http.ResponseWriter, r *http.Request) {
-	claims := app.GetCurrentUser(r)
-
-	if claims == nil {
-		RespondWithHtmlError(w, r, http.StatusOK, "Not authenticated")
-		return
-	}
+	claims := webhelp.GetUserFromContext(r.Context())
+	log.Print("claims", claims)
 
 	// Get full user data from database
 	user, err := app.db.GetUserById(r.Context(), claims.UserID)

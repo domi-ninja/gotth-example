@@ -89,21 +89,23 @@ func Run() {
 	router.Post("/register", app.HandleRegister_POST)
 
 	router.Get("/logout", app.HandleLogout_GET)
-	router.Get("/me", app.HandleMe_GET)
 
 	// parameterised routes need to be registered before the root route
 	router.Get("/post/{postId}", app.HandlePost_PostId_VIEW)
-	router.Delete("/post/{postId}", app.HandlePost_PostId_DELETE)
-
-	// crud routes
-	router.Post("/posts", app.HandlePosts_POST)
 
 	// Protected routes (require authentication)
-	router.Group(func(r chi.Router) {
-		r.Use(app.RequireAuth)
-		// Add protected routes here, for example:
-		// r.Get("/dashboard", app.HandleDashboard_GET)
-		// r.Post("/posts", app.HandlePosts_POST) // if you want posts to be protected
+	router.Group(func(authR chi.Router) {
+		authR.Use(app.RequireAuth)
+
+		authR.Get("/me", app.HandleMe_GET)
+
+		// crud routes
+		router.Post("/posts", app.HandlePosts_POST)
+
+		// manage
+		// TODO more stuff here ... authR.Delete("/post/{postId}", app.HandlePost_PostId_DELETE)
+		authR.Delete("/post/{postId}", app.HandlePost_PostId_DELETE)
+
 	})
 
 	if webhelp.DevMode() {
@@ -115,10 +117,6 @@ func Run() {
 
 	// health check route
 	router.Get("/health", app.HandleHealth)
-
-	// maybe some admin routes on /admin?
-	// Bundle your routes in a separate file and chi route bundle thing
-	// router.Route("/admin", adminRoutes)
 
 	// Listen
 	bindAddr := app.Cfg.Server.BindAddress + ":" + fmt.Sprint(app.Cfg.Server.Port)

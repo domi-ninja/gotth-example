@@ -36,22 +36,25 @@ func (app *Wapp) RequireAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := app.GetJWTFromCookie(r)
 		if err != nil {
+			log.Print("hacking, trying to access a route with RequireAuth with no cookie ", r)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
 
 		claims, err := app.ValidateJWT(tokenString)
 		if err != nil {
+			log.Print("hacking, trying to access a route with RequireAuth with am invalid JWT ", tokenString, r)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
+		log.Print("claims", claims)
 
 		// Add user info to request context
 		ctx := r.Context()
-		ctx = SetUserInContext(ctx, claims.UserID, claims.Email)
+		ctx = SetUserInContext(ctx, *claims)
 		r = r.WithContext(ctx)
-
-		next.ServeHTTP(w, r)
+		log.Fatal("why")
+		//next.ServeHTTP(w, r)
 	})
 }
 
