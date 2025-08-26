@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log"
 	"net/http"
 
 	"domi.ninja/example-project/frontend/components"
@@ -9,20 +10,43 @@ import (
 	"domi.ninja/example-project/webhelp"
 )
 
-func (app *App) HandleMe_VIEW(w http.ResponseWriter, r *http.Request) {
-	// Create header component with toggle dark (no user email for register page)
+func (app *App) Handle_me_VIEW(w http.ResponseWriter, r *http.Request) {
+
+	claims := webhelp.GetClaimsFromContext(r.Context())
+
+	// Check for success messages
+	var successMessage string
+	var passwordSuccessMessage string
+
+	if r.URL.Query().Get("success") == "1" {
+		successMessage = "Profile updated successfully!"
+	}
+	if r.URL.Query().Get("password_success") == "1" {
+		passwordSuccessMessage = "Password changed successfully!"
+	}
+
+	// Create header component with toggle dark and user email
 	toggleDark := components.ToggleDark()
-	header := layouts.Header(app.Cfg.Site, toggleDark, "")
+	header := layouts.Header(app.Cfg.Site, toggleDark, claims.Email)
 
-	// Create register view
-	registerView := views.RegisterView()
-
-	// Create master layout with header and view
-	component := layouts.Master(registerView, header, app.Cfg.Site, app.Cfg.Site, app.version)
-
-	err := webhelp.RenderHTML(r.Context(), w, component)
+	user, err := app.db.GetUserById(r.Context(), claims.UserID)
 	if err != nil {
+		log.Print(err)
 		RespondWithError(w, http.StatusInternalServerError)
 		return
 	}
+
+	// Create me view
+	view := views.MeView(user, successMessage, passwordSuccessMessage)
+
+	// Create master layout with header and view
+	component := layouts.Master(view, header, app.Cfg.Site, app.Cfg.Site, app.version)
+
+	err = webhelp.RenderHTML(r.Context(), w, component)
+	if err != nil {
+		log.Print(err)
+		RespondWithError(w, http.StatusInternalServerError)
+		return
+	}
+
 }

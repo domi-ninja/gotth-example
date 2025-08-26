@@ -7,16 +7,17 @@ import (
 	"strings"
 	"time"
 
+	"domi.ninja/example-project/internal/db_generated"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 // GenerateJWT creates a new JWT token for a user
-func (app *Wapp) GenerateJWT(userID, email string) (string, error) {
+func (app *Wapp) GenerateJWT(user db_generated.User) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour) // Token expires in 24 hours
 
 	claims := &Claims{
-		UserID: userID,
-		Email:  email,
+		UserID: user.ID.(string),
+		Email:  user.Email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

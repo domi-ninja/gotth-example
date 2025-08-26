@@ -41,7 +41,7 @@ func (app *App) HandleIndex_VIEW(w http.ResponseWriter, r *http.Request) {
 
 	err = webhelp.RenderHTML(r.Context(), w, component)
 	if err != nil {
-		log.Print("error rendering posts: ", err)
+		log.Print(err)
 		RespondWithError(w, http.StatusInternalServerError)
 		return
 	}

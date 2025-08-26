@@ -43,7 +43,6 @@ func (app *Wapp) RequireAuth(next http.Handler) http.Handler {
 
 		claims, err := app.ValidateJWT(tokenString)
 		if err != nil {
-			log.Print("hacking, trying to access a route with RequireAuth with am invalid JWT ", tokenString, r)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
@@ -51,10 +50,9 @@ func (app *Wapp) RequireAuth(next http.Handler) http.Handler {
 
 		// Add user info to request context
 		ctx := r.Context()
-		ctx = SetUserInContext(ctx, *claims)
+		ctx = SetClaimsInContext(ctx, *claims)
 		r = r.WithContext(ctx)
-		log.Fatal("why")
-		//next.ServeHTTP(w, r)
+		next.ServeHTTP(w, r)
 	})
 }
 

@@ -99,6 +99,7 @@
   }
 
   .btn-secondary {
+    @apply bg-red-200;
     @apply btn bg-secondary text-secondary-foreground border-border;
     @apply hover:bg-secondary/60;
   }

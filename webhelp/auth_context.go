@@ -10,14 +10,14 @@ const (
 	userClaimsKey contextKey = "context_user_claims"
 )
 
-// SetUserInContext stores user information in request context
-func SetUserInContext(ctx context.Context, user Claims) context.Context {
+// SetClaimsInContext stores user information in request context
+func SetClaimsInContext(ctx context.Context, user Claims) context.Context {
 	ctx = context.WithValue(ctx, userClaimsKey, user)
 	return ctx
 }
 
 // GetUserIDFromContext retrieves user ID from request context
-func GetUserFromContext(ctx context.Context) Claims {
+func GetClaimsFromContext(ctx context.Context) Claims {
 	user, _ := ctx.Value(userClaimsKey).(Claims)
 	// if !ok {
 	// 	retur nil

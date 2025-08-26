@@ -7,6 +7,7 @@ package db_generated
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -64,7 +65,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 
 const getUserByEmailWithPassword = `-- name: GetUserByEmailWithPassword :one
 SELECT id, created_at, updated_at, email, password_hash, display_name
-FROM users 
+FROM users
 WHERE email = ?
 `
 
@@ -100,4 +101,44 @@ func (q *Queries) GetUserById(ctx context.Context, id interface{}) (User, error)
 		&i.DisplayName,
 	)
 	return i, err
+}
+
+const updateUser = `-- name: UpdateUser :exec
+UPDATE users
+SET email = ?, display_name = ?, updated_at = ?
+WHERE id = ?
+`
+
+type UpdateUserParams struct {
+	Email       string
+	DisplayName sql.NullString
+	UpdatedAt   time.Time
+	ID          interface{}
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
+	_, err := q.db.ExecContext(ctx, updateUser,
+		arg.Email,
+		arg.DisplayName,
+		arg.UpdatedAt,
+		arg.ID,
+	)
+	return err
+}
+
+const updateUserPassword = `-- name: UpdateUserPassword :exec
+UPDATE users
+SET password_hash = ?, updated_at = ?
+WHERE id = ?
+`
+
+type UpdateUserPasswordParams struct {
+	PasswordHash string
+	UpdatedAt    time.Time
+	ID           interface{}
+}
+
+func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserPassword, arg.PasswordHash, arg.UpdatedAt, arg.ID)
+	return err
 }

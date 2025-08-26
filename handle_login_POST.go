@@ -43,7 +43,7 @@ func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate JWT token
-	token, err := app.GenerateJWT(user.ID.(string), user.Email)
+	token, err := app.GenerateJWT(user)
 	if err != nil {
 		log.Printf("Error generating JWT: %v", err)
 		RespondWithHtmlError(w, r, http.StatusInternalServerError, "Internal server error")
@@ -53,7 +53,15 @@ func (app *App) HandleLogin_POST(w http.ResponseWriter, r *http.Request) {
 	// Set JWT cookie
 	app.SetJWTCookie(w, token)
 
-	// redirect to home
+	// Check if this is an HTMX request
+	if r.Header.Get("HX-Request") == "true" {
+		// For HTMX requests, set redirect header and return success
+		w.Header().Set("HX-Redirect", "/")
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	// For regular requests, redirect to home
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }

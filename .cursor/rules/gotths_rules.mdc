@@ -1,0 +1,8 @@
+---
+alwaysApply: true
+---
+
+# GOTTHS Stack rules
+
+- Strictly one HTTP Handler function per file
+- The name of handler function files is always strictly `handle_{route}_{route2}_{...}_{HTTP_VERB}.go`

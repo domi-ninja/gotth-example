@@ -15,5 +15,15 @@ WHERE id = ?;
 
 -- name: GetUserByEmailWithPassword :one
 SELECT *
-FROM users 
+FROM users
 WHERE email = ?;
+
+-- name: UpdateUser :exec
+UPDATE users
+SET email = ?, display_name = ?, updated_at = ?
+WHERE id = ?;
+
+-- name: UpdateUserPassword :exec
+UPDATE users
+SET password_hash = ?, updated_at = ?
+WHERE id = ?;

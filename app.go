@@ -97,7 +97,9 @@ func Run() {
 	router.Group(func(authR chi.Router) {
 		authR.Use(app.RequireAuth)
 
-		authR.Get("/me", app.HandleMe_GET)
+		authR.Get("/me", app.Handle_me_VIEW)
+		authR.Post("/me", app.Handle_me_POST)
+		// authR.Post("/me/password", app.Handle_me_password_POST)
 
 		// crud routes
 		router.Post("/posts", app.HandlePosts_POST)

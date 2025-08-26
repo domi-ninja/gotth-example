@@ -70,7 +70,7 @@ func (app *App) HandleRegister_POST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate JWT token
-	token, err := app.GenerateJWT(user.ID.(string), user.Email)
+	token, err := app.GenerateJWT(user)
 	if err != nil {
 		log.Printf("Error generating JWT: %v", err)
 		RespondWithHtmlError(w, r, http.StatusInternalServerError, "Internal server error")
